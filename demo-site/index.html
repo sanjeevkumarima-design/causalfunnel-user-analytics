@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CausalFunnel Demo Site</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+        }
+
+        h1 {
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2.5em;
+        }
+
+        .subtitle {
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+
+        .tracker-status {
+            background: #f0f9ff;
+            border: 2px solid #0ea5e9;
+            border-radius: 10px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .tracker-status.active {
+            background: #f0fdf4;
+            border-color: #22c55e;
+        }
+
+        .tracker-status h3 {
+            color: #0ea5e9;
+            margin-bottom: 5px;
+        }
+
+        .tracker-status.active h3 {
+            color: #22c55e;
+        }
+
+        .section {
+            margin-bottom: 40px;
+        }
+
+        .section h2 {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+
+        .button-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+
+        button {
+            padding: 15px 25px;
+            border: none;
+            border-radius: 10px;
+            font-size: 1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-weight: 600;
+        }
+
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+
+        .btn-primary {
+            background: #667eea;
+            color: white;
+        }
+
+        .btn-secondary {
+            background: #764ba2;
+            color: white;
+        }
+
+        .btn-success {
+            background: #22c55e;
+            color: white;
+        }
+
+        .btn-danger {
+            background: #ef4444;
+            color: white;
+        }
+
+        .card-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 25px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+
+        .card:hover {
+            border-color: #667eea;
+            transform: translateY(-5px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .card h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+
+        .card p {
+            color: #666;
+            line-height: 1.6;
+        }
+
+        .form-section {
+            background: #f8f9fa;
+            padding: 30px;
+            border-radius: 15px;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            color: #333;
+            font-weight: 600;
+        }
+
+        .form-group input,
+        .form-group textarea {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e5e7eb;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+
+        .form-group input:focus,
+        .form-group textarea:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+
+        .click-area {
+            background: linear-gradient(45deg, #ff6b6b, #feca57);
+            height: 200px;
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.5em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin-bottom: 30px;
+        }
+
+        .click-area:hover {
+            transform: scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+
+        .info-box {
+            background: #fef3c7;
+            border-left: 4px solid #f59e0b;
+            padding: 15px;
+            margin-top: 30px;
+            border-radius: 5px;
+        }
+
+        .info-box p {
+            color: #92400e;
+            line-height: 1.6;
+        }
+
+        .session-info {
+            background: #e0e7ff;
+            padding: 15px;
+            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .session-info p {
+            color: #3730a3;
+            margin: 5px 0;
+            font-family: monospace;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🎯 CausalFunnel Demo Site</h1>
+        <p class="subtitle">Test the event tracking script by interacting with the elements below</p>
+
+        <div class="tracker-status" id="trackerStatus">
+            <h3>📡 Tracker Status</h3>
+            <p>Initializing...</p>
+        </div>
+
+        <div class="session-info" id="sessionInfo" style="display: none;">
+            <p><strong>Session ID:</strong> <span id="sessionId"></span></p>
+            <p><strong>API Endpoint:</strong> <span id="apiEndpoint"></span></p>
+        </div>
+
+        <div class="section">
+            <h2>🔘 Buttons</h2>
+            <p style="margin-bottom: 20px; color: #666;">Click these buttons to test click tracking</p>
+            <div class="button-grid">
+                <button class="btn-primary" onclick="showAlert('Primary clicked!')">Primary Button</button>
+                <button class="btn-secondary" onclick="showAlert('Secondary clicked!')">Secondary Button</button>
+                <button class="btn-success" onclick="showAlert('Success clicked!')">Success Button</button>
+                <button class="btn-danger" onclick="showAlert('Danger clicked!')">Danger Button</button>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🃏 Cards</h2>
+            <p style="margin-bottom: 20px; color: #666;">Click these cards to test click tracking on different elements</p>
+            <div class="card-grid">
+                <div class="card" onclick="showAlert('Card 1 clicked!')">
+                    <h3>🚀 Feature One</h3>
+                    <p>This is a clickable card with feature description. Click anywhere on this card to track the event.</p>
+                </div>
+                <div class="card" onclick="showAlert('Card 2 clicked!')">
+                    <h3>⚡ Feature Two</h3>
+                    <p>Another clickable card. All interactions are being tracked by the CausalFunnel script.</p>
+                </div>
+                <div class="card" onclick="showAlert('Card 3 clicked!')">
+                    <h3>🎨 Feature Three</h3>
+                    <p>Click this card to see how the tracker captures coordinates and timestamps.</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🎯 Click Area</h2>
+            <p style="margin-bottom: 20px; color: #666;">Click anywhere in this area to test coordinate tracking</p>
+            <div class="click-area" onclick="showClickCoordinates(event)">
+                Click Me Anywhere!
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📝 Form Elements</h2>
+            <p style="margin-bottom: 20px; color: #666;">Interact with form elements to test tracking</p>
+            <div class="form-section">
+                <div class="form-group">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" placeholder="Enter your name" onclick="showAlert('Name field clicked')">
+                </div>
+                <div class="form-group">
+                    <label for="email">Email</label>
+                    <input type="email" id="email" placeholder="Enter your email" onclick="showAlert('Email field clicked')">
+                </div>
+                <div class="form-group">
+                    <label for="message">Message</label>
+                    <textarea id="message" rows="4" placeholder="Enter your message" onclick="showAlert('Message field clicked')"></textarea>
+                </div>
+                <button class="btn-primary" onclick="showAlert('Form submitted!')">Submit Form</button>
+            </div>
+        </div>
+
+        <div class="info-box">
+            <p><strong>ℹ️ How it works:</strong> This demo site includes the CausalFunnel tracker script. Every click and page view is being tracked and sent to the backend API. Open the browser console (F12) to see the tracking logs in real-time. Check the analytics dashboard to view the collected data.</p>
+        </div>
+    </div>
+
+    <!-- Include the tracker script -->
+    <script src="../tracker/tracker.js"></script>
+
+    <script>
+        // Update tracker status
+        setTimeout(() => {
+            const statusEl = document.getElementById('trackerStatus');
+            const sessionInfoEl = document.getElementById('sessionInfo');
+            
+            if (window.CausalFunnel) {
+                statusEl.classList.add('active');
+                statusEl.querySelector('h3').textContent = '✅ Tracker Active';
+                statusEl.querySelector('p').textContent = 'CausalFunnel tracker is running and capturing events';
+                
+                sessionInfoEl.style.display = 'block';
+                document.getElementById('sessionId').textContent = window.CausalFunnel.getSessionId();
+                document.getElementById('apiEndpoint').textContent = window.CausalFunnel.config.API_ENDPOINT;
+            } else {
+                statusEl.querySelector('h3').textContent = '❌ Tracker Not Loaded';
+                statusEl.querySelector('p').textContent = 'Failed to load the tracker script';
+            }
+        }, 500);
+
+        // Helper functions for demo
+        function showAlert(message) {
+            console.log('Demo interaction:', message);
+            // You can add visual feedback here
+        }
+
+        function showClickCoordinates(event) {
+            const x = event.clientX;
+            const y = event.clientY;
+            console.log(`Clicked at coordinates: (${x}, ${y})`);
+            alert(`Clicked at coordinates: (${x}, ${y})`);
+        }
+    </script>
+</body>
+</html>
